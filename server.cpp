@@ -27,7 +27,7 @@ using namespace std;
 fstream fOut;
 vector<string> ipList;
 vector<time_t> duration;
-char msgAlreadyMem[] = "\"t$ALREADY MEMBER\"";
+char msgAlreadyMem[] = "\"$ALREADY MEMBER\"";
 char msgOk[] = "\"$OK\"";
 char msgNotMem[] = "\"$NOT MEMBER\"";
 
