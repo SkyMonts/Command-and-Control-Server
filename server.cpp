@@ -103,12 +103,7 @@ string getTime(){
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	strftime(buffer,80,"%I:%M:%S",timeinfo);
-    return string(buffer);
-    
-    /*using namespace std::chrono;
-    auto now = time_point_cast<milliseconds>(system_clock::now());
-    return date::format("%T", now);
-    */
+    	return string(buffer);
 }
 
 void serverRequest(int socketFd, string ip){
@@ -225,7 +220,6 @@ void serverRequest(int socketFd, string ip){
 			fOut.close();
 		}
 	}
-	//bzero(cmdbuff, sizeof(cmdbuff));
-
+	
 
 }
