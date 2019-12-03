@@ -11,15 +11,13 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
-#include <ctime>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
-#include <chrono>
-
-
+#include <sys/time.h>
 
 using namespace std;
+
 
 #define MAXPORT 6
 #define MAXBUF 1024
@@ -88,21 +86,30 @@ if ((sd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
  	close(newSocket);
  	
  }
+ 
 
 	return 0;
 }
 
 
 
-string getTime(){
+string getTime(){    
+    struct timeval tmnow;
+    struct tm *tm;
+    char buf[30], usec_buf[6];
+    gettimeofday(&tmnow, NULL);
+    tm = localtime(&tmnow.tv_sec);
+    strftime(buf,30,"%I:%M:%S", tm);
+    strcat(buf,".");
+    sprintf(usec_buf,"%0.1d", (int)tmnow.tv_usec / 1000);
+    strcat(buf,usec_buf);
+    return buf;
+    
+    
+
 	
-	time_t rawtime;
-	struct tm * timeinfo;
-	char buffer[80];
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-	strftime(buffer,80,"%I:%M:%S",timeinfo);
-    	return string(buffer);
+
+    
 }
 
 void serveRequest(int socketFd, string ip){
@@ -169,12 +176,14 @@ void serveRequest(int socketFd, string ip){
 			for(int i = 0; i < ipList.size(); i++){
 				str = "<";
 				str = str + ipList[i] + ", ";
-				str = str + to_string(time(0) - duration[i]) + " seconds>";
+				str = str + to_string(time(0) - duration[i]) + " seconds>\n";
 				strcpy(listBuffer, str.c_str());
 				if((write(socketFd, listBuffer, strlen(listBuffer)) < 0)){
 					fprintf(stderr, "Write Failed\n");
 				}
+
 				bzero(listBuffer, sizeof(listBuffer));
+				str.clear();
 			}
 			fOut << "\n\"" << getTime() << "\" Responded to agent \"" << ip << "\" with \"$OK\"";
 		}
@@ -195,7 +204,7 @@ void serveRequest(int socketFd, string ip){
 			fOut << "\n\"" << getTime() << "\" Responded to agent " << ip << " with \"$OK\"";
 			fOut.close();
 			string s;
-			int fd = open("log.txt", O_RDWR);
+			int fd = open("log.txt", O_RDONLY);
 			int bytesRead;
 			bytesWritten = 0;
 			do{
@@ -219,7 +228,7 @@ void serveRequest(int socketFd, string ip){
 			fOut.close();
 		}
 	}
-	//bzero(cmdbuff, sizeof(cmdbuff));
+	
 
 
 }
