@@ -86,11 +86,8 @@ if ((sd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
  	close(newSocket);
  	
  }
- 
-
 	return 0;
 }
-
 
 
 string getTime(){    
@@ -103,13 +100,7 @@ string getTime(){
     strcat(buf,".");
     sprintf(usec_buf,"%0.1d", (int)tmnow.tv_usec / 1000);
     strcat(buf,usec_buf);
-    return buf;
-    
-    
-
-	
-
-    
+    return buf;    
 }
 
 void serveRequest(int socketFd, string ip){
