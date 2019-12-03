@@ -34,7 +34,7 @@ char msgOk[] = "\"$OK\"";
 char msgNotMem[] = "\"$NOT MEMBER\"";
 
 string getTime();
-void serverRequest(int socketFd, string ip);
+void serveRequest(int socketFd, string ip);
 
 int main (int argc, char* argv[]){
 
@@ -83,12 +83,11 @@ if ((sd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
  	fprintf(stdout,"Connection Created\n");
 
  	inet_ntop(AF_INET, &(name.sin_addr), str, INET_ADDRSTRLEN);
- 	serverRequest(newSocket, str);
+ 	serveRequest(newSocket, str);
  	bzero(str, INET_ADDRSTRLEN);
  	close(newSocket);
  	
  }
- 	//remove("log.txt");
 
 	return 0;
 }
@@ -106,7 +105,7 @@ string getTime(){
     	return string(buffer);
 }
 
-void serverRequest(int socketFd, string ip){
+void serveRequest(int socketFd, string ip){
 	char cmdBuffer[MAXACTION];
 	char logBuffer[MAXBUF];
 	char listBuffer[MAXBUF];
@@ -220,6 +219,7 @@ void serverRequest(int socketFd, string ip){
 			fOut.close();
 		}
 	}
-	
+	//bzero(cmdbuff, sizeof(cmdbuff));
+
 
 }
