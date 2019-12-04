@@ -16,6 +16,7 @@
 #include <time.h>
 #include <sys/time.h>
 
+
 using namespace std;
 
 
@@ -86,8 +87,10 @@ if ((sd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
  	close(newSocket);
  	
  }
+
 	return 0;
 }
+
 
 
 string getTime(){    
@@ -100,7 +103,9 @@ string getTime(){
     strcat(buf,".");
     sprintf(usec_buf,"%0.1d", (int)tmnow.tv_usec / 1000);
     strcat(buf,usec_buf);
-    return buf;    
+    return buf;
+    
+    
 }
 
 void serveRequest(int socketFd, string ip){
@@ -165,17 +170,14 @@ void serveRequest(int socketFd, string ip){
 		if(find(ipList.begin(), ipList.end(), ip) != ipList.end()){
 			string str;
 			for(int i = 0; i < ipList.size(); i++){
-				str = "<";
+				str = str + " \n<";
 				str = str + ipList[i] + ", ";
-				str = str + to_string(time(0) - duration[i]) + " seconds>\n";
-				strcpy(listBuffer, str.c_str());
-				if((write(socketFd, listBuffer, strlen(listBuffer)) < 0)){
+				str = str + to_string(time(0) - duration[i]) + " seconds>\n ";
+			}
+			strcpy(listBuffer, str.c_str());
+			if((write(socketFd, listBuffer, strlen(listBuffer)) < 0)){
 					fprintf(stderr, "Write Failed\n");
 				}
-
-				bzero(listBuffer, sizeof(listBuffer));
-				str.clear();
-			}
 			fOut << "\n\"" << getTime() << "\" Responded to agent \"" << ip << "\" with \"$OK\"";
 		}
 		else{
@@ -219,7 +221,6 @@ void serveRequest(int socketFd, string ip){
 			fOut.close();
 		}
 	}
-	
 
 
 }
